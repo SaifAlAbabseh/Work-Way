@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.workway">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/workway"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/workway_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Workway">
+        <activity android:name=".CompanyPostAd"></activity>
+        <activity android:name=".DisplayRequestersCVScreen" />
+        <activity android:name=".Company_Main" />
+        <activity
+            android:name=".PostCompanyAd"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".RegisterCompanyAccount"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".EditCV" />
+        <activity
+            android:name=".CompanyLogin"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".TempLoading" />
+        <activity android:name=".AdminMain" />
+        <activity
+            android:name=".AdminLogin"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".SearchForCompanies" />
+        <activity android:name=".MainScreen" />
+        <activity android:name=".CheckEmail" />
+        <activity
+            android:name=".ContactUs"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".AboutUs" />
+        <activity android:name=".CreateCV" />
+        <activity
+            android:name=".ResetPassword"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".SignUp"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Login"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".Intro" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

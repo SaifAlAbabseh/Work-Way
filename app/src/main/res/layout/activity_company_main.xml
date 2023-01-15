@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/DrawerLayoutCompanyMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Company_Main">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/CompanyMainAppBar"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#0162AF"
+            android:gravity="center">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/CompanyMainMenuIcon"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:onClick="SlideMenu"
+                    app:srcCompat="@drawable/admin_menu_icon" />
+
+            </TableRow>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView33"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/white" />
+        </TableRow>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#0162AF">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/NoOfReq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableTop="@drawable/number_of_req_icon"
+                    android:gravity="center"
+                    android:text="NO. of requesters\n__________________\n"
+                    android:textColor="#aad241"
+                    android:textSize="20dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp" />
+            </TableRow>
+
+        </TableLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:background="@drawable/adminmaintheme">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="90dp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center">
+
+                        <Button
+                            android:id="@+id/CompanyMainGetButton"
+                            android:layout_width="300dp"
+                            android:layout_height="match_parent"
+                            android:drawableLeft="@drawable/show_requesters_icon"
+                            android:onClick="DisplayRequestersCV"
+                            android:shadowColor="@color/white"
+                            android:shadowDx="0"
+                            android:shadowDy="0"
+                            android:shadowRadius="5"
+                            android:text="\nDisplay requesters CV's\n"
+                            android:textColor="@color/white"
+                            app:backgroundTint="#0162AF"
+                            app:cornerRadius="100dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/ShowUserIfCVCreated" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp" />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center">
+
+                        <Button
+                            android:id="@+id/CompanyMainPostButton"
+                            android:layout_width="300dp"
+                            android:layout_height="match_parent"
+                            android:drawableLeft="@drawable/admin_post_ad"
+                            android:onClick="GoToPostAd"
+                            android:shadowColor="@color/white"
+                            android:shadowDx="0"
+                            android:shadowDy="0"
+                            android:shadowRadius="5"
+                            android:text="\nPost company ad\n"
+                            android:textColor="@color/white"
+                            app:backgroundTint="#0162AF"
+                            app:cornerRadius="100dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/ShowUserIfCVCreated" />
+                    </TableRow>
+
+                </TableLayout>
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#0162AF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#0162AF"
+                android:orientation="vertical">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/imageView1010"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            app:srcCompat="@drawable/huit" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/imageView1212"
+                            android:layout_width="wrap_content"
+                            android:layout_height="70dp"
+                            app:srcCompat="@drawable/workwaytext" />
+                    </TableRow>
+
+                </TableLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+
+                <Button
+                    android:id="@+id/CompanyMainB8"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:drawableLeft="@drawable/showcvicon"
+                    android:onClick="DisplayRequestersCV"
+                    android:shadowColor="@android:color/holo_green_light"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5"
+                    android:text="Display Requesters CV'S"
+                    android:textColor="@android:color/holo_green_light"
+                    app:backgroundTint="#ccffd5"
+                    app:cornerRadius="0dp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
+
+                <TextView
+                    android:id="@+id/textView1111"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:background="@color/white" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp" />
+
+                <Button
+                    android:id="@+id/CompanyMainB6"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:drawableLeft="@drawable/menu_logout"
+                    android:onClick="Logout"
+                    android:shadowColor="@android:color/holo_red_light"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5"
+                    android:text="Logout"
+                    android:textColor="@android:color/holo_red_light"
+                    app:backgroundTint="#ffe6e6"
+                    app:cornerRadius="0dp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:id="@+id/textView1212"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="\u00A9 2021 COPYRIGHT"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </ScrollView>
+    </com.google.android.material.navigation.NavigationView>
+</androidx.drawerlayout.widget.DrawerLayout>

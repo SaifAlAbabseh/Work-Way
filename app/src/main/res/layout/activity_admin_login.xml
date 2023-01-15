@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".AdminLogin">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <ImageView
+                android:id="@+id/imageView21"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:onClick="GoBack"
+                app:srcCompat="@drawable/back" />
+
+            <ImageView
+                android:id="@+id/imageView16"
+                android:layout_width="90dp"
+                android:layout_height="80dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/button11"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/huit" />
+
+        </TableRow>
+    </TableRow>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/introtablelayouttheme">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imageView22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/adminloginlogo" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <EditText
+                        android:id="@+id/PassCode"
+                        android:layout_width="250dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/border"
+                        android:drawableLeft="@drawable/ic_baseline_vpn_key_24"
+                        android:ems="10"
+                        android:hint="  PassCode"
+                        android:inputType="textPassword"
+                        android:paddingLeft="25dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="25dp"
+                        android:paddingBottom="10dp"
+                        android:textColor="@color/black"
+                        android:textColorHint="@android:color/darker_gray"
+                        android:textCursorDrawable="@drawable/cursorcolor"
+                        tools:layout_editor_absoluteX="69dp"
+                        tools:layout_editor_absoluteY="294dp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/button22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:onClick="CheckForAdmin"
+                        android:shadowColor="@color/white"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
+                        android:shadowRadius="5"
+                        android:text="\n         Login         \n"
+                        android:textColor="@color/white"
+                        app:backgroundTint="@android:color/holo_green_light"
+                        app:cornerRadius="100dp"
+                        app:strokeColor="@color/ProgressBarColor"
+                        app:strokeWidth="2dp"
+                        tools:layout_editor_absoluteX="123dp"
+                        tools:layout_editor_absoluteY="436dp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp" />
+                </TableRow>
+            </TableLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

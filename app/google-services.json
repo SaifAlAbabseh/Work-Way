@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "170133665447",
+    "project_id": "workway-8f080",
+    "storage_bucket": "workway-8f080.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170133665447:android:fa272a224a17f246bc8d82",
+        "android_client_info": {
+          "package_name": "com.example.workway"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "170133665447-mrcmlfstcml55g2mh8bi2n1abukbaieo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA61rSjILbqpfbMt3XHX2jZ5INCddcSkls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "170133665447-mrcmlfstcml55g2mh8bi2n1abukbaieo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
