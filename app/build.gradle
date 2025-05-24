@@ -4,6 +4,8 @@ plugins {
 }
 
 android {
+    namespace 'com.example.workway'  // ← Replace with your actual package name
+
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
