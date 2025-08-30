@@ -8,6 +8,8 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.example.workway.common_classes.StatusBarColor;
+
 public class MainActivity extends AppCompatActivity {
     public static Class ToWhere=Intro.class;
     @Override

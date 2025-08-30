@@ -7,6 +7,8 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.example.workway.common_classes.StatusBarColor;
+
 public class TempLoading extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

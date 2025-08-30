@@ -1,36 +1,27 @@
 {
   "project_info": {
-    "project_number": "170133665447",
-    "project_id": "workway-8f080",
-    "storage_bucket": "workway-8f080.appspot.com"
+    "project_number": "824534278040",
+    "firebase_url": "https://workway-b84da-default-rtdb.firebaseio.com",
+    "project_id": "workway-b84da",
+    "storage_bucket": "workway-b84da.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:170133665447:android:fa272a224a17f246bc8d82",
+        "mobilesdk_app_id": "1:824534278040:android:e20f6319fe04164a5655ed",
         "android_client_info": {
           "package_name": "com.example.workway"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "170133665447-mrcmlfstcml55g2mh8bi2n1abukbaieo.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA61rSjILbqpfbMt3XHX2jZ5INCddcSkls"
+          "current_key": "AIzaSyCkPomvEiGS-i0ErZxLJLS0KqRhQYyN6do"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "170133665447-mrcmlfstcml55g2mh8bi2n1abukbaieo.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

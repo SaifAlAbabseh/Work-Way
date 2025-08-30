@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.workway.common_classes.AddUser;
+import com.example.workway.common_classes.StatusBarColor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class Login extends AppCompatActivity {
-    boolean IfUserExists = false;
     static int Tries = 0;
     static double HowLong=5.0;
     DatabaseReference reff;
@@ -53,7 +54,9 @@ public class Login extends AppCompatActivity {
     }
 
     public void CheckForLogin(View v) {
-        if (isEmpty()) {
+        EditText UserEmail = (EditText) findViewById(R.id.UserEmail);
+        EditText UserPassword = (EditText) findViewById(R.id.UserPassword);
+        if (isEmpty(UserEmail, UserPassword)) {
             Toast.makeText(Login.this, "Make sure text fields are not empty", Toast.LENGTH_SHORT).show();
         } else {
             if (Tries == 5) {
@@ -61,51 +64,25 @@ public class Login extends AppCompatActivity {
                 TimerForTries.AlreadyBlocked=true;
                 Toast.makeText(Login.this, "Blocked for : "+String.format("%.2f",HowLong)+" Minutes", Toast.LENGTH_SHORT).show();
             } else {
-                readData(new FireBaseCallBack() {
-                    @Override
-                    public void onCallBack() {
-                        if (IfUserExists) {
-                            //When the email and password are correct...
-                            EditText UserEmail = (EditText) findViewById(R.id.UserEmail);
-                            MainScreen.userEmail = UserEmail.getText().toString().trim();
-                            finish();
-                            MainActivity.ToWhere = MainScreen.class;
-                            startActivity(new Intent(Login.this, MainActivity.class));
-                        } else {
-                            Toast.makeText(Login.this, "Email or Password is incorrect", Toast.LENGTH_SHORT).show();
-                            Tries++;
-                        }
-                    }
-                });
+                login(UserEmail, UserPassword);
             }
         }
     }
 
-    private boolean isEmpty() {
-        EditText UserEmail = (EditText) findViewById(R.id.UserEmail);
-        EditText UserPassword = (EditText) findViewById(R.id.UserPassword);
-        if (UserEmail.getText().toString().trim().length() == 0 || UserPassword.getText().toString().length() == 0) {
-            return true;
-        }
-        return false;
+    private boolean isEmpty(EditText UserEmail, EditText UserPassword) {
+        return UserEmail.getText().toString().trim().isEmpty() || UserPassword.getText().toString().isEmpty();
     }
 
-    private interface FireBaseCallBack {
-        void onCallBack();
-    }
-
-    private void readData(Login.FireBaseCallBack callBack) {
-        EditText UserEmail = (EditText) findViewById(R.id.UserEmail);
-        EditText UserPassword = (EditText) findViewById(R.id.UserPassword);
+    private void login(EditText UserEmail, EditText UserPassword) {
         reff.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean IfUserExists = false;
                 for (DataSnapshot data : snapshot.getChildren()) {
                     AddUser DB = data.getValue(AddUser.class);
                     if (UserEmail.getText().toString().equals(DB.Email) && UserPassword.getText().toString().equals(DB.Password)) {
                         IfUserExists = true;
-                        int Where = Integer.parseInt(data.getKey());
-                        MainScreen.WhichKey = Where;
+                        MainScreen.WhichKey = Integer.parseInt(data.getKey());
                         if (DB.IfCVCreated == 0) {
                             MainScreen.IfCVCreatedBefore = false;
                         } else if (DB.IfCVCreated == 1) {
@@ -114,7 +91,16 @@ public class Login extends AppCompatActivity {
                         break;
                     }
                 }
-                callBack.onCallBack();
+                if (IfUserExists) {
+                    //When the email and password are correct...
+                    MainScreen.userEmail = UserEmail.getText().toString().trim();
+                    finish();
+                    MainActivity.ToWhere = MainScreen.class;
+                    startActivity(new Intent(Login.this, MainActivity.class));
+                } else {
+                    Toast.makeText(Login.this, "Email or Password is incorrect", Toast.LENGTH_SHORT).show();
+                    Tries++;
+                }
             }
 
             @Override

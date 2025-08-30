@@ -10,22 +10,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
+
+import com.example.workway.common_classes.CV;
+import com.example.workway.common_classes.StatusBarColor;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Date;
 
-class CV{
-    public String FullName;
-    public String DateOfBirth;
-    public String PhoneNumber;
-    public String Email;
-    public String ITSkills;
-    public String OtherSkills;
-    public String Languages;
-    public String YearsOfExp;
-    public String GPA;
-}
+
 public class CreateCV extends AppCompatActivity {
     public static int WhichKey=0;
     DatabaseReference reff;
@@ -99,33 +92,20 @@ public class CreateCV extends AppCompatActivity {
         EditText ITSkills=(EditText)findViewById(R.id.CVITSkills);
         EditText OtherSkills=(EditText)findViewById(R.id.CVOtherSkills);
         EditText CVLanguages=(EditText)findViewById(R.id.CVLanguages);
-        if(FName.getText().toString().trim().length()>0 && LName.getText().toString().trim().length()>0 && Day.getText().toString().trim().length()>0 && Month.getText().toString().trim().length()>0 && Year.getText().toString().trim().length()>0 && PhoneNumber.getText().toString().trim().length()>0 && Email.getText().toString().trim().length()>0 && ITSkills.getText().toString().trim().length()>0 && OtherSkills.getText().toString().trim().length()>0 && CVLanguages.getText().toString().trim().length()>0){
-            return true;
-        }
-        return false;
+        return !FName.getText().toString().trim().isEmpty() && !LName.getText().toString().trim().isEmpty() && !Day.getText().toString().trim().isEmpty() && !Month.getText().toString().trim().isEmpty() && !Year.getText().toString().trim().isEmpty() && !PhoneNumber.getText().toString().trim().isEmpty() && !Email.getText().toString().trim().isEmpty() && !ITSkills.getText().toString().trim().isEmpty() && !OtherSkills.getText().toString().trim().isEmpty() && !CVLanguages.getText().toString().trim().isEmpty();
     }
     private boolean CheckForYearsOfExp(){
         RadioButton LessThan5=(RadioButton)findViewById(R.id.LessThan5);
         RadioButton Between5And10=(RadioButton)findViewById(R.id.Between5And10);
         RadioButton MoreThan10=(RadioButton)findViewById(R.id.MoreThan10);
-        if(LessThan5.isChecked() || Between5And10.isChecked() || MoreThan10.isChecked()){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return LessThan5.isChecked() || Between5And10.isChecked() || MoreThan10.isChecked();
     }
     private boolean CheckForGPA(){
         RadioButton Good=(RadioButton)findViewById(R.id.Good);
         RadioButton VeryGood=(RadioButton)findViewById(R.id.VeryGood);
         RadioButton Accepted=(RadioButton)findViewById(R.id.Accepted);
         RadioButton Excellent=(RadioButton)findViewById(R.id.Excellent);
-        if(Good.isChecked() || VeryGood.isChecked() || Accepted.isChecked() || Excellent.isChecked()){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return Good.isChecked() || VeryGood.isChecked() || Accepted.isChecked() || Excellent.isChecked();
     }
     private boolean CheckTheDate(){
         EditText Day=(EditText)findViewById(R.id.Day);
@@ -136,10 +116,7 @@ public class CreateCV extends AppCompatActivity {
         int year=Integer.parseInt(Year.getText().toString());
         Date date=new Date();
         int DateYear=date.getYear()+1900;
-        if((day>=1 && day<=31) && (month>=1 && month<=12) && (year>=1950 && year<=DateYear)){
-            return true;
-        }
-        return false;
+        return (day >= 1 && day <= 31) && (month >= 1 && month <= 12) && (year >= 1950 && year <= DateYear);
     }
     private void SendCVData(){
         CV userCV=new CV();
@@ -171,7 +148,7 @@ public class CreateCV extends AppCompatActivity {
         else if(((RadioButton)findViewById(R.id.VeryGood)).isChecked()){
             userCV.GPA="Very Good";
         }
-        reff.child(""+MainScreen.userEmail.replace(".",",")).setValue(userCV);
+        reff.child(MainScreen.userEmail.replace(".", ",")).setValue(userCV);
         reff= FirebaseDatabase.getInstance().getReference().child("UserInfo");
         reff.child(""+WhichKey).child("IfCVCreated").setValue(1);
     }

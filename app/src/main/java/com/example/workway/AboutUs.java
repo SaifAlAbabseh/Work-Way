@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import com.example.workway.common_classes.StatusBarColor;
+
 public class AboutUs extends AppCompatActivity {
 
     @Override

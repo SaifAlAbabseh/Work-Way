@@ -20,6 +20,10 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.workway.common_classes.PostAd;
+import com.example.workway.common_classes.Request;
+import com.example.workway.common_classes.StatusBarColor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,11 +31,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
-class Request{
-    public String RequestedCompanyID;
-    public String RequesterEmail;
-}
 public class SearchForCompanies extends AppCompatActivity {
     DatabaseReference reff;
     DatabaseReference reff2;
@@ -56,54 +55,12 @@ public class SearchForCompanies extends AppCompatActivity {
         setContentView(R.layout.activity_search_for_companies);
         reff= FirebaseDatabase.getInstance().getReference().child("CompaniesAds");
         ShowResults();
-        reff2= FirebaseDatabase.getInstance().getReference().child("Requests");
-        reff2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    DBCount=(int)(snapshot.getChildrenCount());
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-        startActivity(new Intent(SearchForCompanies.this,TempLoading.class));
     }
     public void GoBack(View v){
         finish();
         startActivity(new Intent(SearchForCompanies.this,MainScreen.class));
     }
     public void ShowResults(){
-        readData(new FireBaseCallBack() {
-            @Override
-            public void onCallBack() {}
-        });
-    }
-    private interface FireBaseCallBack2{
-        void onCallBack();
-    }
-    private void readData2(SearchForCompanies.FireBaseCallBack2 callBack,String tempID){
-        reff2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot data:snapshot.getChildren()){
-                    Request r=data.getValue(Request.class);
-                    if(r.RequesterEmail.equals(MainScreen.userEmail) && r.RequestedCompanyID.equals(tempID)){
-                        IfRequestBefore=true;
-                        break;
-                    }
-                }
-                callBack.onCallBack();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
-    }
-    private interface FireBaseCallBack{
-        void onCallBack();
-    }
-    private void readData(SearchForCompanies.FireBaseCallBack callBack){
         LinearLayout layout=(LinearLayout)findViewById(R.id.ResultBox);
         reff.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -149,41 +106,11 @@ public class SearchForCompanies extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             IfRequestBefore=false;
-                                if (MainScreen.IfCVCreatedBefore) {
-                                    readData2(new FireBaseCallBack2() {
-                                        @Override
-                                        public void onCallBack() {
-                                            if (IfRequestBefore){
-                                                Toast.makeText(SearchForCompanies.this,"You've already requested for this company's ads",Toast.LENGTH_SHORT).show();
-                                            }
-                                            else{
-                                                new AlertDialog.Builder(SearchForCompanies.this)
-                                                        .setTitle("Check")
-                                                        .setMessage("Are you sure?")
-                                                        .setIcon(android.R.drawable.stat_sys_warning)
-                                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int whichButton) {
-                                                                String CompanyID= company.CompanyID;
-                                                                String UserEmail=MainScreen.userEmail;
-                                                                Request r=new Request();
-                                                                r.RequestedCompanyID=CompanyID;
-                                                                r.RequesterEmail=UserEmail;
-                                                                reff2.child(""+(DBCount+1)).setValue(r);
-                                                                startActivity(new Intent(SearchForCompanies.this,TempLoading.class));
-                                                                new Handler().postDelayed(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        Toast.makeText(SearchForCompanies.this,"Successfully sent the CV :)",Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                },2000);
-                                                            }})
-                                                        .setNegativeButton(android.R.string.no, null).show();
-                                            }
-                                        }
-                                    }, company.CompanyID);
-                                } else {
-                                    Toast.makeText(SearchForCompanies.this, "You did not create a CV", Toast.LENGTH_SHORT).show();
-                                }
+                            if (MainScreen.IfCVCreatedBefore) {
+                                checkIfRequestedBefore(company);
+                            } else {
+                                Toast.makeText(SearchForCompanies.this, "You did not create a CV", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                     Space s=new Space(getApplicationContext());
@@ -258,7 +185,62 @@ public class SearchForCompanies extends AppCompatActivity {
                     layout.addView(s);
 
                 }
-                callBack.onCallBack();
+                reff2= FirebaseDatabase.getInstance().getReference().child("Requests");
+                reff2.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists()){
+                            DBCount=(int)(snapshot.getChildrenCount());
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+                startActivity(new Intent(SearchForCompanies.this,TempLoading.class));
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
+
+    private void checkIfRequestedBefore(PostAd company){
+        reff2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot data:snapshot.getChildren()){
+                    Request r=data.getValue(Request.class);
+                    if(r.RequesterEmail.equals(MainScreen.userEmail) && r.RequestedCompanyID.equals(company.CompanyID)){
+                        IfRequestBefore=true;
+                        break;
+                    }
+                }
+                if (IfRequestBefore){
+                    Toast.makeText(SearchForCompanies.this,"You've already requested for this company's ads",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    new AlertDialog.Builder(SearchForCompanies.this)
+                            .setTitle("Check")
+                            .setMessage("Are you sure?")
+                            .setIcon(android.R.drawable.stat_sys_warning)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    String CompanyID= company.CompanyID;
+                                    String UserEmail=MainScreen.userEmail;
+                                    Request r=new Request();
+                                    r.RequestedCompanyID=CompanyID;
+                                    r.RequesterEmail=UserEmail;
+                                    reff2.child(""+(DBCount+1)).setValue(r);
+                                    startActivity(new Intent(SearchForCompanies.this,TempLoading.class));
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(SearchForCompanies.this,"Successfully sent the CV :)",Toast.LENGTH_SHORT).show();
+                                        }
+                                    },2000);
+                                }})
+                            .setNegativeButton(android.R.string.no, null).show();
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}

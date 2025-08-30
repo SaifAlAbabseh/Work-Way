@@ -6,13 +6,12 @@ plugins {
 android {
     namespace 'com.example.workway'  // ← Replace with your actual package name
 
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 35
 
     defaultConfig {
         applicationId "com.example.workway"
-        minSdkVersion 16
-        targetSdkVersion 30
+        minSdkVersion 23
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -36,6 +35,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation platform('com.google.firebase:firebase-bom:34.2.0')
     implementation 'com.google.firebase:firebase-database:20.0.0'
     implementation "androidx.drawerlayout:drawerlayout:1.1.1"
     testImplementation 'junit:junit:4.+'

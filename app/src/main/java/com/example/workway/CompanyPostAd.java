@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.workway.common_classes.PostAd;
+import com.example.workway.common_classes.StatusBarColor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,32 +44,14 @@ public class CompanyPostAd extends AppCompatActivity {
         HowMuchAds = 1;
         EditText CompName = (EditText) findViewById(R.id.CompanyEnteredCompanyName);
         EditText CompConstraints = (EditText) findViewById(R.id.CompanyEnteredCompanyConstraints);
-        if (CompName.getText().toString().trim().length() > 0 && CompConstraints.getText().toString().trim().length() > 0) {
+        if (!CompName.getText().toString().trim().isEmpty() && !CompConstraints.getText().toString().trim().isEmpty()) {
             new AlertDialog.Builder(CompanyPostAd.this)
                     .setTitle("Check")
                     .setMessage("Sure ?")
                     .setIcon(android.R.drawable.stat_sys_warning)
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            readData2(new FireBaseCallBack2() {
-                                @Override
-                                public void onCallBack() {
-                                    PostAd newAd = new PostAd();
-                                    newAd.CompanyID = Company_Main.ID;
-                                    newAd.CompanyName = CompName.getText().toString();
-                                    newAd.CompanyRequirements = CompConstraints.getText().toString();
-                                    reff.child("" + Company_Main.ID+","+HowMuchAds).setValue(newAd);
-                                    startActivity(new Intent(CompanyPostAd.this, TempLoading.class));
-                                    CompName.setText("");
-                                    CompConstraints.setText("");
-                                    new Handler().postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(CompanyPostAd.this, "Successfully posted", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }, 2000);
-                                }
-                            });
+                            PostCompanyAdFunHelper(CompName, CompConstraints);
                         }
                     })
                     .setNegativeButton(android.R.string.no, null).show();
@@ -76,21 +60,30 @@ public class CompanyPostAd extends AppCompatActivity {
         }
     }
 
-    private interface FireBaseCallBack2 {
-        void onCallBack();
-    }
-
-    private void readData2(CompanyPostAd.FireBaseCallBack2 callBack) {
+    private void PostCompanyAdFunHelper(EditText CompName, EditText CompConstraints) {
         reff.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot data : snapshot.getChildren()) {
                     PostAd DBID = data.getValue(PostAd.class);
-                    if ((""+Company_Main.ID).equals(DBID.CompanyID)) {
+                    if (Company_Main.ID.equals(DBID.CompanyID)) {
                         HowMuchAds++;
                     }
                 }
-                callBack.onCallBack();
+                PostAd newAd = new PostAd();
+                newAd.CompanyID = Company_Main.ID;
+                newAd.CompanyName = CompName.getText().toString();
+                newAd.CompanyRequirements = CompConstraints.getText().toString();
+                reff.child(Company_Main.ID+","+HowMuchAds).setValue(newAd);
+                startActivity(new Intent(CompanyPostAd.this, TempLoading.class));
+                CompName.setText("");
+                CompConstraints.setText("");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(CompanyPostAd.this, "Successfully posted", Toast.LENGTH_SHORT).show();
+                    }
+                }, 2000);
             }
 
             @Override

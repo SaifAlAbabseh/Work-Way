@@ -13,17 +13,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.workway.common_classes.PostAd;
+import com.example.workway.common_classes.RegisterCompany;
+import com.example.workway.common_classes.StatusBarColor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-class PostAd {
-    public String CompanyID;
-    public String CompanyName;
-    public String CompanyRequirements;
-}
 
 public class PostCompanyAd extends AppCompatActivity {
     DatabaseReference reff;
@@ -55,80 +52,47 @@ public class PostCompanyAd extends AppCompatActivity {
         EditText CompID = (EditText) findViewById(R.id.EnteredCompanyID);
         EditText CompName = (EditText) findViewById(R.id.EnteredCompanyName);
         EditText CompConstraints = (EditText) findViewById(R.id.EnteredCompanyConstraints);
-        if (CompID.getText().toString().trim().length() > 0 && CompName.getText().toString().trim().length() > 0 && CompConstraints.getText().toString().trim().length() > 0) {
+        if (!CompID.getText().toString().trim().isEmpty() && !CompName.getText().toString().trim().isEmpty() && !CompConstraints.getText().toString().trim().isEmpty()) {
             //Check if the ID is registered or not...
-            readData(new FireBaseCallBack() {
-                @Override
-                public void onCallBack() {
-                    if (IfIDExists) {
-                        new AlertDialog.Builder(PostCompanyAd.this)
-                                .setTitle("Check")
-                                .setMessage("Sure ?")
-                                .setIcon(android.R.drawable.stat_sys_warning)
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        readData2(new FireBaseCallBack2() {
-                                            @Override
-                                            public void onCallBack() {
-                                                PostAd newAd = new PostAd();
-                                                newAd.CompanyID = CompID.getText().toString();
-                                                newAd.CompanyName = CompName.getText().toString();
-                                                newAd.CompanyRequirements = CompConstraints.getText().toString();
-                                                reff.child("" + CompID.getText().toString() + "," + HowMuchAds).setValue(newAd);
-                                                startActivity(new Intent(PostCompanyAd.this, TempLoading.class));
-                                                CompID.setText("");
-                                                CompName.setText("");
-                                                CompConstraints.setText("");
-                                                new Handler().postDelayed(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        Toast.makeText(PostCompanyAd.this, "Successfully posted ad", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }, 2000);
-                                            }
-                                        });
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.no, null).show();
-                    } else {
-                        Toast.makeText(PostCompanyAd.this, "Company ID is not registered", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+            checkIfIdExists(CompID, CompName, CompConstraints);
+
         } else {
             Toast.makeText(PostCompanyAd.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private interface FireBaseCallBack {
-        void onCallBack();
-    }
-
-    private void readData(PostCompanyAd.FireBaseCallBack callBack) {
-        EditText ComID = (EditText) findViewById(R.id.EnteredCompanyID);
+    private void checkIfIdExists(EditText CompID, EditText CompName, EditText CompConstraints) {
         reff2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot data : snapshot.getChildren()) {
                     RegisterCompany DBID = data.getValue(RegisterCompany.class);
-                    if (ComID.getText().toString().equals(DBID.ID)) {
+                    if (CompID.getText().toString().equals(DBID.ID)) {
                         IfIDExists = true;
                     }
                 }
-                callBack.onCallBack();
+                if (IfIDExists) {
+                    new AlertDialog.Builder(PostCompanyAd.this)
+                            .setTitle("Check")
+                            .setMessage("Sure ?")
+                            .setIcon(android.R.drawable.stat_sys_warning)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    checkHowMuchAds(CompID, CompName, CompConstraints);
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null).show();
+                } else {
+                    Toast.makeText(PostCompanyAd.this, "Company ID is not registered", Toast.LENGTH_SHORT).show();
+                }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
     }
 
-    private interface FireBaseCallBack2 {
-        void onCallBack();
-    }
-
-    private void readData2(PostCompanyAd.FireBaseCallBack2 callBack) {
+    private void checkHowMuchAds(EditText CompID, EditText CompName, EditText CompConstraints) {
         EditText ComID = (EditText) findViewById(R.id.EnteredCompanyID);
         reff.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -139,9 +103,22 @@ public class PostCompanyAd extends AppCompatActivity {
                         HowMuchAds++;
                     }
                 }
-                callBack.onCallBack();
+                PostAd newAd = new PostAd();
+                newAd.CompanyID = CompID.getText().toString();
+                newAd.CompanyName = CompName.getText().toString();
+                newAd.CompanyRequirements = CompConstraints.getText().toString();
+                reff.child(CompID.getText().toString() + "," + HowMuchAds).setValue(newAd);
+                startActivity(new Intent(PostCompanyAd.this, TempLoading.class));
+                CompID.setText("");
+                CompName.setText("");
+                CompConstraints.setText("");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(PostCompanyAd.this, "Successfully posted ad", Toast.LENGTH_SHORT).show();
+                    }
+                }, 2000);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }

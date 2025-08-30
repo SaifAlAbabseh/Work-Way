@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.workway.common_classes.AddUser;
+import com.example.workway.common_classes.StatusBarColor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -111,33 +113,7 @@ public class ResetPassword extends AppCompatActivity {
         EditText resetUserEmail=(EditText)findViewById(R.id.ResetUserEmail);
         EditText resetUserPassword=(EditText)findViewById(R.id.ResetUserPassword);
         EditText resetConfirmPassword=(EditText)findViewById(R.id.ResetConfirmPassword);
-        if(resetUserEmail.getText().toString().trim().length()==0  || resetUserPassword.getText().toString().length()==0 || resetConfirmPassword.getText().toString().length()==0){
-            return true;
-        }
-        return false;
-    }
-    private interface FireBaseCallBack{
-        void onCallBack();
-    }
-    private void readData(ResetPassword.FireBaseCallBack callBack){
-        EditText userEmail = (EditText) findViewById(R.id.ResetUserEmail);
-        reff.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot data:snapshot.getChildren()){
-                    AddUser DBEmail=data.getValue(AddUser.class);
-                    if(userEmail.getText().toString().equals(DBEmail.Email)){
-                        IfExists=true;
-                        int Where=Integer.parseInt(data.getKey());
-                        CheckEmail.ResetPassWhere=Where;
-                        break;
-                    }
-                }
-                callBack.onCallBack();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
+        return resetUserEmail.getText().toString().trim().isEmpty() || resetUserPassword.getText().toString().isEmpty() || resetConfirmPassword.getText().toString().isEmpty();
     }
     public void CheckForReset(View v){
         IfExists=false;
@@ -146,26 +122,11 @@ public class ResetPassword extends AppCompatActivity {
         }
         else{
             if(isPasswordsEqual()){
+                EditText resetUserEmail = (EditText) findViewById(R.id.ResetUserEmail);
                 EditText resetUserPassword=(EditText)findViewById(R.id.ResetUserPassword);
                 CheckPassForReq check=new CheckPassForReq();
                 if(check.CheckPassIfMeetTheReq(resetUserPassword.getText().toString()).equals("good")){
-                    readData(new FireBaseCallBack() {
-                        @Override
-                        public void onCallBack() {
-                            if(IfExists){
-                                EditText resetUserEmail=(EditText)findViewById(R.id.ResetUserEmail);
-                                EditText resetUserPassword=(EditText)findViewById(R.id.ResetUserPassword);
-                                finish();
-                                CheckEmail.FromWhere=ResetPassword.this;
-                                CheckEmail.userEmail=resetUserEmail.getText().toString().trim();
-                                CheckEmail.ResetForNewPassword=resetUserPassword.getText().toString();
-                                startActivity(new Intent(ResetPassword.this,CheckEmail.class));
-                            }
-                            else{
-                                Toast.makeText(ResetPassword.this,"This email is not used",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                    checkIfUserExists(resetUserEmail, resetUserPassword);
                 }
                 else{
                     Toast.makeText(ResetPassword.this,"Check the password requirements",Toast.LENGTH_SHORT).show();
@@ -177,13 +138,38 @@ public class ResetPassword extends AppCompatActivity {
             }
         }
     }
+    private void checkIfUserExists(EditText resetUserEmail, EditText resetUserPassword){
+        reff.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot data:snapshot.getChildren()){
+                    AddUser DBEmail=data.getValue(AddUser.class);
+                    if(resetUserEmail.getText().toString().equals(DBEmail.Email)){
+                        IfExists=true;
+                        CheckEmail.ResetPassWhere= Integer.parseInt(data.getKey());
+                        break;
+                    }
+                }
+                if(IfExists){
+                    EditText resetUserEmail=(EditText)findViewById(R.id.ResetUserEmail);
+                    finish();
+                    CheckEmail.FromWhere=ResetPassword.this;
+                    CheckEmail.userEmail=resetUserEmail.getText().toString().trim();
+                    CheckEmail.ResetForNewPassword=resetUserPassword.getText().toString();
+                    startActivity(new Intent(ResetPassword.this,CheckEmail.class));
+                }
+                else{
+                    Toast.makeText(ResetPassword.this,"This email is not used",Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
     private boolean isPasswordsEqual(){
         EditText resetUserPassword=(EditText)findViewById(R.id.ResetUserPassword);
         EditText resetConfirmPassword=(EditText)findViewById(R.id.ResetConfirmPassword);
-        if(resetUserPassword.getText().toString().equals(resetConfirmPassword.getText().toString())){
-            return true;
-        }
-        return false;
+        return resetUserPassword.getText().toString().equals(resetConfirmPassword.getText().toString());
     }
     public void ShowPassReqDialog(View v){
         dialog.show();

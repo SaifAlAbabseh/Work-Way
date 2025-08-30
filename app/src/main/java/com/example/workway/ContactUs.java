@@ -12,6 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.workway.common_classes.StatusBarColor;
+
 
 public class ContactUs extends AppCompatActivity {
     @Override
@@ -29,9 +31,9 @@ public class ContactUs extends AppCompatActivity {
     public void SendConcern(View v){
         EditText Concern=(EditText)findViewById(R.id.ContactUserConcern);
         EditText Email=(EditText)findViewById(R.id.ContactUserEmail);
-        if(Concern.getText().toString().trim().length()>0 && Email.getText().toString().trim().length()>0){
+        if(!Concern.getText().toString().trim().isEmpty() && !Email.getText().toString().trim().isEmpty()){
             startActivity(new Intent(ContactUs.this,TempLoading.class));
-            JavaMailAPI mail=new JavaMailAPI(this,"workway.j0@gmail.com","A concern from : "+Email.getText().toString().trim(),"His concern : \n\n"+Concern.getText().toString());
+                JavaMailAPI mail=new JavaMailAPI(this,"workway.j0@gmail.com","A concern from : "+Email.getText().toString().trim(),"Their concern : \n\n"+Concern.getText().toString());
             mail.execute();
             Concern.setText("");
             Email.setText("");

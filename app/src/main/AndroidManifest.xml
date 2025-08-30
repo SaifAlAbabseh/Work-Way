@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/workway_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Workway">
-        <activity android:name=".CompanyPostAd"></activity>
+        <activity android:name=".CompanyPostAd" />
         <activity android:name=".DisplayRequestersCVScreen" />
         <activity android:name=".Company_Main" />
         <activity
@@ -47,7 +47,8 @@
             android:name=".Login"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".Intro" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

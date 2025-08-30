@@ -1,6 +1,8 @@
 package com.example.workway;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
+
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -33,11 +35,14 @@ public class JavaMailAPI extends AsyncTask<Void,Void,Void>  {
     protected Void doInBackground(Void... params) {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "465");
-        mSession = Session.getDefaultInstance(props,
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.starttls.required", "true");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+
+        mSession = Session.getInstance(props,
                 new javax.mail.Authenticator() {
                     //Authenticating the password
                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -52,7 +57,7 @@ public class JavaMailAPI extends AsyncTask<Void,Void,Void>  {
             mm.setText(mMessage);
             Transport.send(mm);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            Log.e("MAIL_ERROR", "Failed to send Email", e);
         }
         return null;
     }

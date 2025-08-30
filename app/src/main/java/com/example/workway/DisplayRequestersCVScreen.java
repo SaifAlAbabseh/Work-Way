@@ -20,6 +20,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.workway.common_classes.CV;
+import com.example.workway.common_classes.Request;
+import com.example.workway.common_classes.StatusBarColor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,17 +49,7 @@ public class DisplayRequestersCVScreen extends AppCompatActivity {
     }
     public void FillTheArr(){
         Requesters=new ArrayList<String>();
-        readData(new FireBaseCallBack() {
-            @Override
-            public void onCallBack() {
-                for(int i=0;i<Requesters.size();i++){
-                    readData2(new FireBaseCallBack2() {
-                        @Override
-                        public void onCallBack() {}
-                    },i);
-                }
-            }
-        });
+        displayCvHelper();
     }
     public void Refresh(View v){
         finish();
@@ -72,10 +65,8 @@ public class DisplayRequestersCVScreen extends AppCompatActivity {
         finish();
         startActivity(new Intent(DisplayRequestersCVScreen.this,Company_Main.class));
     }
-    private interface FireBaseCallBack{
-        void onCallBack();
-    }
-    private void readData(DisplayRequestersCVScreen.FireBaseCallBack callBack){
+
+    private void displayCvHelper(){
         reff.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -85,17 +76,16 @@ public class DisplayRequestersCVScreen extends AppCompatActivity {
                         Requesters.add(r.RequesterEmail);
                     }
                 }
-                callBack.onCallBack();
+                for(int i=0;i<Requesters.size();i++){
+                    viewCvHelper(i);
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
 
-    private interface FireBaseCallBack2{
-        void onCallBack();
-    }
-    private void readData2(DisplayRequestersCVScreen.FireBaseCallBack2 callBack,int index){
+    private void viewCvHelper(int index){
         LinearLayout layout=(LinearLayout)findViewById(R.id.CVResults);
         reff2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -407,7 +397,6 @@ public class DisplayRequestersCVScreen extends AppCompatActivity {
                         break;
                     }
                 }
-                callBack.onCallBack();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}

@@ -10,16 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-class StatusBarColor{
-    public static void ChangeColor(Activity act){//To change the status bar background color...
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            act.getWindow().setStatusBarColor(act.getResources().getColor(R.color.ProgressBarColor, act.getTheme()));
-        }
-        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            act.getWindow().setStatusBarColor(act.getResources().getColor(R.color.ProgressBarColor));
-        }
-    }
-}
+import com.example.workway.common_classes.StatusBarColor;
+
 public class Intro extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

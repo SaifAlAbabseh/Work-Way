@@ -16,17 +16,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.workway.common_classes.AddUser;
+import com.example.workway.common_classes.StatusBarColor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-class AddUser{
-    public String Email;
-    public String Password;
-    public int IfCVCreated;
-}
 public class CheckEmail extends AppCompatActivity {
     int DBCount=0;
     DatabaseReference reff;
@@ -132,7 +129,7 @@ public class CheckEmail extends AppCompatActivity {
     }
     public void CheckUserEmail(View v){
         EditText CodeField=(EditText)findViewById(R.id.userEnteredCode);
-        if(CodeField.getText().toString().trim().length()>0){
+        if(!CodeField.getText().toString().trim().isEmpty()){
             if(CodeField.getText().toString().equals(CodeForSecurity)){
                 if(FromWhere.getClass().getSimpleName().toString().equals("ResetPassword")){
                     CheckForReset();

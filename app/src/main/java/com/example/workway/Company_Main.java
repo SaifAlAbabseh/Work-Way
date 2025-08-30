@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.workway.common_classes.Request;
+import com.example.workway.common_classes.StatusBarColor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,12 +33,9 @@ public class Company_Main extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_company_main);
         reff= FirebaseDatabase.getInstance().getReference().child("Requests");
-        CountTheRequesters();
+        countTheRequestersHelper();
     }
-    private interface FireBaseCallBack{
-        void onCallBack();
-    }
-    private void readData(Company_Main.FireBaseCallBack callBack){
+    private void countTheRequestersHelper() {
         reff.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -46,21 +45,14 @@ public class Company_Main extends AppCompatActivity {
                         countHowManyReq++;
                     }
                 }
-                callBack.onCallBack();
+                TextView countText=(TextView)findViewById(R.id.NoOfReq);
+                countText.setText(countText.getText().toString()+countHowManyReq);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
-    public void CountTheRequesters(){
-        readData(new FireBaseCallBack() {
-            @Override
-            public void onCallBack() {
-                TextView countText=(TextView)findViewById(R.id.NoOfReq);
-                countText.setText(countText.getText().toString()+countHowManyReq);
-            }
-        });
-    }
+
     public void GoToPostAd(View v){
         finish();
         startActivity(new Intent(this,CompanyPostAd.class));

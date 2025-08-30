@@ -19,6 +19,9 @@ import android.widget.EditText;
 
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.workway.common_classes.AddUser;
+import com.example.workway.common_classes.StatusBarColor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -109,27 +112,7 @@ public class SignUp extends AppCompatActivity {
         finish();
         startActivity(new Intent(this,Intro.class));
     }
-    private interface FireBaseCallBack{
-        void onCallBack();
-    }
-    private void readData(FireBaseCallBack callBack){
-        EditText userEmail = (EditText) findViewById(R.id.SignUserEmail);
-        reff.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot data:snapshot.getChildren()){
-                    AddUser DBEmail=data.getValue(AddUser.class);
-                    if(userEmail.getText().toString().equals(DBEmail.Email)){
-                        IfExists=true;
-                        break;
-                    }
-                }
-                callBack.onCallBack();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
-    }
+
     public void CheckForSignUp(View v) {
         IfExists=false;
         if (isEmpty()) {
@@ -138,25 +121,10 @@ public class SignUp extends AppCompatActivity {
         else {
             if (isPasswordsEqual()) {
                 CheckPassForReq check=new CheckPassForReq();
-                EditText UserPassword = (EditText) findViewById(R.id.SignUserPassword);
-                if(check.CheckPassIfMeetTheReq(UserPassword.getText().toString()).equals("good")){
-                    readData(new FireBaseCallBack() {
-                        @Override
-                        public void onCallBack() {
-                            if(IfExists){
-                                Toast.makeText(SignUp.this,"Email is already in use",Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                EditText UserEmail = (EditText) findViewById(R.id.SignUserEmail);
-                                EditText UserPassword = (EditText) findViewById(R.id.SignUserPassword);
-                                finish();
-                                CheckEmail.FromWhere=SignUp.this;
-                                CheckEmail.SignUpPassword=UserPassword.getText().toString();
-                                CheckEmail.userEmail=UserEmail.getText().toString().trim();
-                                startActivity(new Intent(SignUp.this,CheckEmail.class));
-                            }
-                        }
-                    });
+                EditText userEmail = (EditText) findViewById(R.id.SignUserEmail);
+                EditText userPassword = (EditText) findViewById(R.id.SignUserPassword);
+                if(check.CheckPassIfMeetTheReq(userPassword.getText().toString()).equals("good")){
+                    signUp(userEmail, userPassword);
                 }
                 else{
                     Toast.makeText(SignUp.this,"Check the password requirements",Toast.LENGTH_SHORT).show();
@@ -169,23 +137,45 @@ public class SignUp extends AppCompatActivity {
         }
     }
 
+    private void signUp(EditText userEmail, EditText userPassword) {
+        reff.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    AddUser DBEmail = data.getValue(AddUser.class);
+                    if (userEmail.getText().toString().equals(DBEmail.Email)) {
+                        IfExists = true;
+                        break;
+                    }
+                }
+                if (IfExists) {
+                    Toast.makeText(SignUp.this, "Email is already in use", Toast.LENGTH_SHORT).show();
+                } else {
+                    finish();
+                    CheckEmail.FromWhere = SignUp.this;
+                    CheckEmail.SignUpPassword = userPassword.getText().toString();
+                    CheckEmail.userEmail = userEmail.getText().toString().trim();
+                    startActivity(new Intent(SignUp.this, CheckEmail.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
     private boolean isPasswordsEqual() {
         EditText UserPassword = (EditText) findViewById(R.id.SignUserPassword);
         EditText ConfirmPassword = (EditText) findViewById(R.id.SignConfirmPassword);
-        if (UserPassword.getText().toString().equals(ConfirmPassword.getText().toString())) {
-            return true;
-        }
-        return false;
+        return UserPassword.getText().toString().equals(ConfirmPassword.getText().toString());
     }
 
     private boolean isEmpty() {
         EditText UserEmail = (EditText) findViewById(R.id.SignUserEmail);
         EditText UserPassword = (EditText) findViewById(R.id.SignUserPassword);
         EditText ConfirmPassword = (EditText) findViewById(R.id.SignConfirmPassword);
-        if (UserEmail.getText().toString().trim().length() == 0 || UserPassword.getText().toString().length() == 0 || ConfirmPassword.getText().toString().length() == 0) {
-            return true;
-        }
-        return false;
+        return UserEmail.getText().toString().trim().isEmpty() || UserPassword.getText().toString().isEmpty() || ConfirmPassword.getText().toString().isEmpty();
     }
     public void ShowPassReqDialog(View v){
         dialog.show();

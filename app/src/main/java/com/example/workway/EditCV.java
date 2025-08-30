@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.example.workway.common_classes.CV;
+import com.example.workway.common_classes.StatusBarColor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,28 +41,6 @@ public class EditCV extends AppCompatActivity {
         SetOldCVData();
     }
 
-    private interface FireBaseCallBack{
-        void onCallBack();
-    }
-    private void readData(EditCV.FireBaseCallBack callBack){
-        EditText UserEmail=(EditText)findViewById(R.id.UserEmail);
-        EditText UserPassword=(EditText)findViewById(R.id.UserPassword);
-        reff.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot data:snapshot.getChildren()){
-                    if(data.getKey().equals(MainScreen.userEmail.replace(".",","))){
-                        CV DB=data.getValue(CV.class);
-                        SetOld(DB);
-                        break;
-                    }
-                }
-                callBack.onCallBack();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
-    }
     public void SetOld(CV DB){
         String[] name=DB.FullName.split(" ");
         EditText fname=(EditText)findViewById(R.id.EditCVFirstName);
@@ -84,39 +64,57 @@ public class EditCV extends AppCompatActivity {
         Otherskills.setText(DB.OtherSkills);
         EditText Languages=(EditText)findViewById(R.id.EditCVLanguages);
         Languages.setText(DB.Languages);
-        if(DB.GPA.equals("Accepted")){
-            RadioButton accepted=(RadioButton)findViewById(R.id.EditAccepted);
-            accepted.setChecked(true);
+        switch (DB.GPA) {
+            case "Accepted": {
+                RadioButton accepted = (RadioButton) findViewById(R.id.EditAccepted);
+                accepted.setChecked(true);
+                break;
+            }
+            case "Good": {
+                RadioButton accepted = (RadioButton) findViewById(R.id.EditGood);
+                accepted.setChecked(true);
+                break;
+            }
+            case "Very Good": {
+                RadioButton accepted = (RadioButton) findViewById(R.id.EditVeryGood);
+                accepted.setChecked(true);
+                break;
+            }
+            case "Excellent": {
+                RadioButton accepted = (RadioButton) findViewById(R.id.EditExcellent);
+                accepted.setChecked(true);
+                break;
+            }
         }
-        else if(DB.GPA.equals("Good")){
-            RadioButton accepted=(RadioButton)findViewById(R.id.EditGood);
-            accepted.setChecked(true);
-        }
-        else if(DB.GPA.equals("Very Good")){
-            RadioButton accepted=(RadioButton)findViewById(R.id.EditVeryGood);
-            accepted.setChecked(true);
-        }
-        else if(DB.GPA.equals("Excellent")){
-            RadioButton accepted=(RadioButton)findViewById(R.id.EditExcellent);
-            accepted.setChecked(true);
-        }
-        if(DB.YearsOfExp.equals("Less than 5 years")){
-            RadioButton lessthan5=(RadioButton)findViewById(R.id.EditLessThan5);
-            lessthan5.setChecked(true);
-        }
-        else if(DB.YearsOfExp.equals("Between 5 and 10 years")){
-            RadioButton between=(RadioButton)findViewById(R.id.EditBetween5And10);
-            between.setChecked(true);
-        }
-        else if(DB.YearsOfExp.equals("More than 10 years")){
-            RadioButton more=(RadioButton)findViewById(R.id.EditMoreThan10);
-            more.setChecked(true);
+        switch (DB.YearsOfExp) {
+            case "Less than 5 years":
+                RadioButton lessthan5 = (RadioButton) findViewById(R.id.EditLessThan5);
+                lessthan5.setChecked(true);
+                break;
+            case "Between 5 and 10 years":
+                RadioButton between = (RadioButton) findViewById(R.id.EditBetween5And10);
+                between.setChecked(true);
+                break;
+            case "More than 10 years":
+                RadioButton more = (RadioButton) findViewById(R.id.EditMoreThan10);
+                more.setChecked(true);
+                break;
         }
     }
     public void SetOldCVData(){
-        readData(new FireBaseCallBack() {
+        reff.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onCallBack() {}
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot data:snapshot.getChildren()){
+                    if(data.getKey().equals(MainScreen.userEmail.replace(".",","))){
+                        CV DB=data.getValue(CV.class);
+                        SetOld(DB);
+                        break;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
     public void ExcellentClicked(View v){
@@ -181,33 +179,20 @@ public class EditCV extends AppCompatActivity {
         EditText ITSkills=(EditText)findViewById(R.id.EditCVITSkills);
         EditText OtherSkills=(EditText)findViewById(R.id.EditCVOtherSkills);
         EditText CVLanguages=(EditText)findViewById(R.id.EditCVLanguages);
-        if(FName.getText().toString().trim().length()>0 && LName.getText().toString().trim().length()>0 && Day.getText().toString().trim().length()>0 && Month.getText().toString().trim().length()>0 && Year.getText().toString().trim().length()>0 && PhoneNumber.getText().toString().trim().length()>0 && Email.getText().toString().trim().length()>0 && ITSkills.getText().toString().trim().length()>0 && OtherSkills.getText().toString().trim().length()>0 && CVLanguages.getText().toString().trim().length()>0){
-            return true;
-        }
-        return false;
+        return !FName.getText().toString().trim().isEmpty() && !LName.getText().toString().trim().isEmpty() && !Day.getText().toString().trim().isEmpty() && !Month.getText().toString().trim().isEmpty() && !Year.getText().toString().trim().isEmpty() && !PhoneNumber.getText().toString().trim().isEmpty() && !Email.getText().toString().trim().isEmpty() && !ITSkills.getText().toString().trim().isEmpty() && !OtherSkills.getText().toString().trim().isEmpty() && !CVLanguages.getText().toString().trim().isEmpty();
     }
     private boolean CheckForYearsOfExp(){
         RadioButton LessThan5=(RadioButton)findViewById(R.id.EditLessThan5);
         RadioButton Between5And10=(RadioButton)findViewById(R.id.EditBetween5And10);
         RadioButton MoreThan10=(RadioButton)findViewById(R.id.EditMoreThan10);
-        if(LessThan5.isChecked() || Between5And10.isChecked() || MoreThan10.isChecked()){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return LessThan5.isChecked() || Between5And10.isChecked() || MoreThan10.isChecked();
     }
     private boolean CheckForGPA(){
         RadioButton Good=(RadioButton)findViewById(R.id.EditGood);
         RadioButton VeryGood=(RadioButton)findViewById(R.id.EditVeryGood);
         RadioButton Accepted=(RadioButton)findViewById(R.id.EditAccepted);
         RadioButton Excellent=(RadioButton)findViewById(R.id.EditExcellent);
-        if(Good.isChecked() || VeryGood.isChecked() || Accepted.isChecked() || Excellent.isChecked()){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return Good.isChecked() || VeryGood.isChecked() || Accepted.isChecked() || Excellent.isChecked();
     }
     private boolean CheckTheDate(){
         EditText Day=(EditText)findViewById(R.id.EditDay);
@@ -218,10 +203,7 @@ public class EditCV extends AppCompatActivity {
         int year=Integer.parseInt(Year.getText().toString());
         Date date=new Date();
         int DateYear=date.getYear()+1900;
-        if((day>=1 && day<=31) && (month>=1 && month<=12) && (year>=1950 && year<=DateYear)){
-            return true;
-        }
-        return false;
+        return (day >= 1 && day <= 31) && (month >= 1 && month <= 12) && (year >= 1950 && year <= DateYear);
     }
 
     public void EditCVData(){
@@ -254,7 +236,7 @@ public class EditCV extends AppCompatActivity {
         else if(((RadioButton)findViewById(R.id.EditVeryGood)).isChecked()){
             userCV.GPA="Very Good";
         }
-        reff.child(""+MainScreen.userEmail.replace(".",",")).setValue(userCV);
+        reff.child(MainScreen.userEmail.replace(".", ",")).setValue(userCV);
     }
     public void CheckForEditCV(View v){
         if(CheckForFields()){
